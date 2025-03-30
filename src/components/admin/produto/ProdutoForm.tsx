@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import ProdutoBasicInfoForm from "./form/ProdutoBasicInfoForm";
@@ -21,7 +20,16 @@ interface ProdutoFormData {
 interface ProdutoFormProps {
   initialData: ProdutoFormData;
   isLoading: boolean;
-  onSubmit: (formData: ProdutoFormData) => void;
+  onSubmit: (formData: {
+    nome: string;
+    descricao: string;
+    preco: number;
+    parcelas: number;
+    imagem_url: string;
+    estoque: number;
+    slug: string;
+    ativo: boolean;
+  }) => void;
   onCancel: () => void;
   generateSlug: () => void;
   onChange: (formData: ProdutoFormData) => void;
@@ -56,8 +64,16 @@ export default function ProdutoForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted with data:', form);
-    onSubmit(form);
+
+    const formattedForm = {
+      ...form,
+      preco: parseFloat(form.preco),
+      parcelas: parseInt(form.parcelas, 10),
+      estoque: parseInt(form.estoque, 10),
+    };
+
+    console.log('Form submitted with data:', formattedForm);
+    onSubmit(formattedForm);
   };
 
   return (

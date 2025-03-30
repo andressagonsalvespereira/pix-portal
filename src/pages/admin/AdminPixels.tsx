@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
@@ -27,7 +26,11 @@ export default function AdminPixels() {
   const [pixelData, setPixelData] = useState<any>(null);
   const [selectedProduct, setSelectedProduct] = useState<string | undefined>(productId);
   const [productName, setProductName] = useState<string | undefined>('');
+  const [error, setError] = useState<string | null>(null); // Novo estado para erros
   const { toast } = useToast();
+
+  console.log("productId:", productId); // Depuração
+  console.log("selectedProduct:", selectedProduct); // Depuração
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,13 +43,29 @@ export default function AdminPixels() {
 
   useEffect(() => {
     if (selectedProduct) {
+      console.log("Buscando pixel para produto:", selectedProduct); // Depuração
       getPixel(selectedProduct)
-        .then(data => setPixelData(data))
-        .catch(error => console.error("Erro ao buscar pixels:", error));
+        .then(data => {
+          console.log("Pixel data:", data); // Depuração
+          setPixelData(data);
+        })
+        .catch(error => {
+          console.error("Erro ao buscar pixels:", error);
+          setError("Erro ao carregar os pixels. Verifique o console para mais detalhes."); // Exibir erro na tela
+        });
 
+      console.log("Buscando produto:", selectedProduct); // Depuração
       getProdutoById(selectedProduct)
-        .then(product => setProductName(product?.nome))
-        .catch(error => console.error("Erro ao buscar produto:", error));
+        .then(product => {
+          console.log("Produto:", product); // Depuração
+          setProductName(product?.nome);
+        })
+        .catch(error => {
+          console.error("Erro ao buscar produto:", error);
+          setError("Erro ao carregar o produto. Verifique o console para mais detalhes."); // Exibir erro na tela
+        });
+    } else {
+      setError("Nenhum produto selecionado. Por favor, acesse a página com um ID de produto válido.");
     }
   }, [selectedProduct]);
 
@@ -78,7 +97,6 @@ export default function AdminPixels() {
     }
   };
 
-  // Update form values when pixel data changes
   useEffect(() => {
     if (pixelData) {
       form.reset({
@@ -94,6 +112,10 @@ export default function AdminPixels() {
       });
     }
   }, [pixelData, form]);
+
+  if (error) {
+    return <div className="p-4 text-red-500">{error}</div>; // Exibir erro na tela
+  }
 
   return (
     <div>

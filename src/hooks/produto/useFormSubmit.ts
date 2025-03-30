@@ -29,8 +29,11 @@ export const useFormSubmit = (onSuccess?: () => void) => {
         nome: formData.nome,
         descricao: formData.descricao,
         preco: formData.preco,
-        categoria_id: '', // Default empty string
-        imagens: formData.imagem_url ? [formData.imagem_url] : [], // Convert single image to array
+        parcelas: formData.parcelas, // ✅ ESSENCIAL
+        estoque: formData.estoque,
+        ativo: formData.ativo,
+        categoria_id: '', // Pode deixar null ou opcional se quiser
+        imagens: formData.imagem_url ? [formData.imagem_url] : [],
         slug: formData.slug,
       };
       
@@ -77,9 +80,13 @@ export const useFormSubmit = (onSuccess?: () => void) => {
         nome: formData.nome,
         descricao: formData.descricao,
         preco: formData.preco,
+        parcelas: formData.parcelas,
+        estoque: formData.estoque,
+        ativo: formData.ativo,
         slug: formData.slug,
         imagens: formData.imagem_url ? [formData.imagem_url] : undefined,
       };
+      
       
       const result = await atualizarProduto(id, updates);
       
