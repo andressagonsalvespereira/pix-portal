@@ -1,9 +1,8 @@
-import { Router } from 'express';
-import { gerarCobrancaPix } from '../controllers/asaasController';
+import express from 'express';
+import { criarCobrancaPixHandler } from '../controllers/asaasController';
 
-const router = Router();
+const router = express.Router();
 
-// rota para gerar cobrança PIX via Asaas
-router.post('/pix', gerarCobrancaPix);
+router.post('/criar-cobranca', criarCobrancaPixHandler);
 
 export default router;

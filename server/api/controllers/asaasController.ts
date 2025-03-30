@@ -1,19 +1,12 @@
 import { Request, Response } from 'express';
 import { criarCobrancaPix } from '../services/asaas';
 
-export const gerarCobrancaPix = async (req: Request, res: Response) => {
+export const criarCobrancaPixHandler = async (req: Request, res: Response) => {
   try {
-    const { customer, value, description } = req.body;
-
-    if (!customer || !value) {
-      return res.status(400).json({ error: 'Parâmetros insuficientes.' });
-    }
-
-    const resultado = await criarCobrancaPix({ customer, value, description });
-
-    return res.status(201).json(resultado);
-  } catch (error: any) {
-    console.error('Erro na cobrança PIX:', error.response?.data || error.message);
-    return res.status(500).json({ error: error.response?.data || error.message });
+    const cobranca = await criarCobrancaPix(req.body);
+    res.status(200).json(cobranca);
+  } catch (error) {
+    console.error('Erro ao criar cobrança:', error);
+    res.status(500).json({ error: 'Erro ao criar cobrança' });
   }
 };
