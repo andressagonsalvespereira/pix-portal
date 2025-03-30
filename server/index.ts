@@ -8,10 +8,11 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/asaas', asaasRoutes); // ✅ conecta as rotas
+// ✅ CONECTA SUAS ROTAS
+app.use('/api/asaas', asaasRoutes);
 
 app.get('/', (req, res) => {
-  res.send('API do Pix Portal está no ar!');
+  res.send('API Pix Portal rodando!');
 });
 
 app.listen(port, () => {
