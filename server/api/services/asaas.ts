@@ -1,10 +1,5 @@
 import axios from 'axios';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY! // use a chave com permissão de leitura
-);
+import { supabase } from '../../lib/supabase';
 
 async function carregarConfiguracoesCheckout() {
   const { data, error } = await supabase
